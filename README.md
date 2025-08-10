@@ -1,0 +1,1 @@
+Initial React + TypeScript + Vite + TailwindCSS Starter Template
