@@ -7,10 +7,8 @@ function Airdrop() {
   const [amount, setAmount] = useState(0);
   const { connection } = useConnection();
   const [balance, setBalance] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
-  if (!wallet.connected) {
-    return <div>Please connect your wallet</div>;
-  }
   if (!wallet.publicKey) return;
 
   connection
@@ -29,24 +27,41 @@ function Airdrop() {
     } catch (err) {
       console.error(err);
       alert("Airdrop failed!");
+    } finally {
+      setIsLoading(false);
     }
   }
 
   async function callAirDrop() {
+    setIsLoading(true);
     await airdrop(amount);
   }
 
   return (
-    <div className="m-5 ">
-      <input
-        type="number"
-        placeholder="Enter airdrop amount (SOL)"
-        className="border mr-3"
-        onChange={(e) => setAmount(Number(e.target.value))}
-      />
-      <button onClick={callAirDrop} className="border bg-slate-500 p-3 rounded">Send the Airdrop</button>
-      <div className="p-3 text-2xl">Wallet Address: {wallet.publicKey?.toBase58()}</div>
-      <div className="p-3 text-2xl"> Balance: {balance}</div>
+    <div className="p-4 border rounded mb-2 mt-2 ">
+      <div className="flex gap-3 ">
+        <input
+          type="number"
+          placeholder="Enter airdrop amount (SOL)"
+          className="border p-2 rounded ml-3 min-w-1/3"
+          onChange={(e) => setAmount(Number(e.target.value))}
+        />
+
+        <button
+          onClick={callAirDrop}
+          className={`border p-3 rounded min-w-1/3 ${
+            isLoading
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-blue-500 hover:bg-blue-600 text-white"
+          } `}
+        >
+          {isLoading ? "Sending..." : "Send Airdrop"}
+        </button>
+      </div>
+      <div className="p-3 text-2xl">
+        Wallet Address: {wallet.publicKey?.toBase58()}
+      </div>
+      <div className="p-3 text-2xl"> Balance: {balance} Sol</div>
     </div>
   );
 }

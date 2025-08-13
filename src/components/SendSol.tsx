@@ -1,4 +1,4 @@
-import  type { FC, ChangeEvent } from "react";
+import type { FC, ChangeEvent } from "react";
 import { useState } from "react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import {
@@ -16,6 +16,8 @@ const SendSol: FC<SendSolProps> = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const wallet = useWallet();
   const { connection } = useConnection();
+
+  if (!wallet.publicKey) return;
 
   // Validation helper
   const isValidAddress = (addr: string): boolean => {
@@ -157,10 +159,6 @@ const SendSol: FC<SendSolProps> = () => {
         >
           {isLoading ? "Sending..." : "Send SOL"}
         </button>
-
-        {!wallet.publicKey && (
-          <p className="text-sm text-gray-600">Connect wallet to send SOL</p>
-        )}
       </div>
     </div>
   );

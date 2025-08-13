@@ -1,6 +1,6 @@
 import "./App.css";
 import type { FC } from "react";
-import { useMemo } from "react";
+// import { useMemo } from "react";
 // import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import {
   ConnectionProvider,
@@ -14,23 +14,24 @@ import {
 import "@solana/wallet-adapter-react-ui/styles.css";
 
 import Gather from "./components/Gather";
-import { PhantomWalletAdapter } from "@solana/wallet-adapter-wallets";
-import type { Adapter } from "@solana/wallet-adapter-base";
 
+// import { PhantomWalletAdapter } from "@solana/wallet-adapter-wallets";
+// import type { Adapter } from "@solana/wallet-adapter-base";
 
-const RPC_URL: string =
-  "https://shy-damp-bird.solana-devnet.quiknode.pro/090ab3d499fc648bdbefc73a5329ce499715a6fc/";
-// const DEVNET_RPC_URL: string = "https://api.devnet.solana.com";
+// const RPC_URL: string =
+//   "https://shy-damp-bird.solana-devnet.quiknode.pro/090ab3d499fc648bdbefc73a5329ce499715a6fc/";
+
+const DEVNET_RPC_URL: string = "https://api.devnet.solana.com";
 
 const App: FC = () => {
-  const wallets: Adapter[] = useMemo(() => [new PhantomWalletAdapter()], []);
+  // const wallets: Adapter[] = useMemo(() => [new PhantomWalletAdapter()], []);
 
   return (
-    <ConnectionProvider endpoint={RPC_URL}>
-      <WalletProvider wallets={wallets} autoConnect>
+    <ConnectionProvider endpoint={DEVNET_RPC_URL}>
+      <WalletProvider wallets={[]} autoConnect>
         <WalletModalProvider>
-          <div className="m-5">
-            <div className="flex gap-3 mb-4">
+          <div className="p-5">
+            <div className="flex justify-evenly">
               <WalletMultiButton>Connect</WalletMultiButton>
               <WalletDisconnectButton>Disconnect</WalletDisconnectButton>
             </div>
