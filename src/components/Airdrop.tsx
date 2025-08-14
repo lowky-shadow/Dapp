@@ -26,7 +26,7 @@ function Airdrop() {
       alert("Airdrop successful!");
     } catch (err) {
       console.error(err);
-      alert("Airdrop failed!");
+      alert(`Airdrop failed! ${err}`);
     } finally {
       setIsLoading(false);
     }

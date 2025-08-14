@@ -44,18 +44,18 @@ const SendSol: FC<SendSolProps> = () => {
       return;
     }
 
-    if (!address.trim()) {
+    if (!address.trim()) { //if address is empty
       alert("Please enter a recipient address!");
       return;
     }
 
-    if (!isValidAddress(address.trim())) {
+    if (!isValidAddress(address.trim())) { //if address is invalid
       alert("Invalid Solana address!");
       return;
     }
 
     const numAmount: number = parseFloat(amount);
-    if (!numAmount || numAmount <= 0) {
+    if (!numAmount || numAmount <= 0) { //if it is zero of negative, return
       alert("Please enter a valid amount greater than 0!");
       return;
     }
@@ -67,6 +67,8 @@ const SendSol: FC<SendSolProps> = () => {
       const balance: number = await connection.getBalance(wallet.publicKey);
       const balanceInSol: number = balance / LAMPORTS_PER_SOL;
 
+      //balanceInSol is the balance you have
+      //numAmount is the amount you want to send
       if (balanceInSol < numAmount) {
         alert(`Insufficient balance! You have ${balanceInSol.toFixed(4)} SOL`);
         return;
