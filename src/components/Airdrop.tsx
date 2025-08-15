@@ -1,6 +1,6 @@
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function Airdrop() {
   const wallet = useWallet();
@@ -9,7 +9,28 @@ function Airdrop() {
   const [balance, setBalance] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  if (!wallet.publicKey) return;
+  // Use useEffect to fetch balance when wallet changes
+  useEffect(() => {
+    if (wallet.publicKey) {
+      connection
+        .getBalance(wallet.publicKey)
+        .then((bal) => setBalance(bal / LAMPORTS_PER_SOL))
+        .catch((err) => console.error("Error fetching balance:", err));
+    } else {
+      setBalance(0);
+    }
+  }, [wallet.publicKey, connection]);
+
+  // Early return if wallet not connected
+  if (!wallet.publicKey) {
+    return (
+      <div className="p-4 border rounded mb-2 mt-2">
+        <div className="text-center text-gray-500">
+          Please connect your wallet to use the airdrop feature.
+        </div>
+      </div>
+    );
+  }
 
   connection
     .getBalance(wallet.publicKey)
@@ -18,10 +39,16 @@ function Airdrop() {
   async function airdrop(amountSol: number) {
     try {
       if (!wallet.publicKey) return;
+      setIsLoading(true);
+
       await connection.requestAirdrop(
         wallet.publicKey,
         amountSol * LAMPORTS_PER_SOL
       );
+
+      // Refresh balance after airdrop
+      const newBalance = await connection.getBalance(wallet.publicKey);
+      setBalance(newBalance / LAMPORTS_PER_SOL);
 
       alert("Airdrop successful!");
     } catch (err) {
@@ -33,7 +60,10 @@ function Airdrop() {
   }
 
   async function callAirDrop() {
-    setIsLoading(true);
+    if (amount <= 0) {
+      alert("Please enter a valid amount greater than 0");
+      return;
+    }
     await airdrop(amount);
   }
 
