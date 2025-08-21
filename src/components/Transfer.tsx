@@ -7,10 +7,12 @@ import {
   LAMPORTS_PER_SOL,
   PublicKey,
 } from "@solana/web3.js";
+import Input from "./SmallComponents/Input";
+import Button from "./SmallComponents/Button";
 
-interface SendSolProps {}
+//interface TransferProps {}
 
-const SendSol: FC<SendSolProps> = () => {
+const Transfer: FC = () => {
   const [amount, setAmount] = useState<string>("");
   const [address, setAddress] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -44,18 +46,21 @@ const SendSol: FC<SendSolProps> = () => {
       return;
     }
 
-    if (!address.trim()) { //if address is empty
+    if (!address.trim()) {
+      //if address is empty
       alert("Please enter a recipient address!");
       return;
     }
 
-    if (!isValidAddress(address.trim())) { //if address is invalid
+    if (!isValidAddress(address.trim())) {
+      //if address is invalid
       alert("Invalid Solana address!");
       return;
     }
 
     const numAmount: number = parseFloat(amount);
-    if (!numAmount || numAmount <= 0) { //if it is zero of negative, return
+    if (!numAmount || numAmount <= 0) {
+      //if it is zero of negative, return
       alert("Please enter a valid amount greater than 0!");
       return;
     }
@@ -126,44 +131,38 @@ const SendSol: FC<SendSolProps> = () => {
   };
 
   return (
-    <div className="p-4 border rounded">
-      <h3 className="text-lg font-semibold mb-3">Send SOL</h3>
+    <div className="p-4 flex flex-col items-center justify-evenly gap-3 bg-slate-900 w-1/3 rounded-3xl shadow-2xl">
+      <h1 className="text-2xl font-semibold p-5">Send SOL</h1>
 
-      <div className="flex flex-col gap-3 max-w-md">
-        <input
+      <div className="flex flex-col gap-6 min-w-md ">
+        <Input
           type="text"
-          placeholder="Recipient address"
-          className="p-2 border rounded"
+          placeholder="Address"
+          className="outline-[5px] outline-slate-950"
           value={address}
           onChange={handleAddressChange}
           disabled={isLoading}
         />
 
-        <input
+        <Input
           type="number"
           placeholder="Amount (SOL)"
-          className="p-2 border rounded"
+          className=""
           value={amount}
           onChange={handleAmountChange}
-          min="0"
-          step="0.001"
           disabled={isLoading}
         />
-
-        <button
-          className={`p-3 rounded font-medium ${
-            isLoading
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-500 hover:bg-blue-600 text-white"
-          }`}
-          onClick={sendSol}
-          disabled={isLoading || !wallet.publicKey}
-        >
-          {isLoading ? "Sending..." : "Send SOL"}
-        </button>
       </div>
+      <Button
+        isLoading={isLoading}
+        onClick={sendSol}
+        className="min-w-sm"
+        disabled={isLoading || !wallet.publicKey}
+      >
+        {isLoading ? "Sending..." : "Send SOL"}
+      </Button>
     </div>
   );
 };
 
-export default SendSol;
+export default Transfer;

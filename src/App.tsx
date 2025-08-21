@@ -6,8 +6,8 @@ import {
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import "@solana/wallet-adapter-react-ui/styles.css";
 
-import NavBar from "@/components/NavBar";
 import "./App.css";
+import Pages from "./pages/Page";
 
 const DEVNET_RPC_URL: string = "https://api.devnet.solana.com";
 
@@ -16,7 +16,7 @@ const App: FC = () => {
     <ConnectionProvider endpoint={DEVNET_RPC_URL}>
       <WalletProvider wallets={[]} autoConnect>
         <WalletModalProvider>
-          <NavBar />
+          <Pages />
         </WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
